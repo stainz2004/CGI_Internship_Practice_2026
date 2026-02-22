@@ -2,11 +2,15 @@
 # Spring Boot / Gradle
 # =====================
 
+# PostgreSQL Docker volume data
+backend/postgres-data/
+
 # Build output
 backend/build/
 backend/out/
 backend/bin/
 backend/target/
+backend/.env
 
 # Gradle cache (not the wrapper itself)
 backend/.gradle/

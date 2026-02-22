@@ -37,6 +37,27 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+// Load .env file and expose its variables to bootRun and test tasks
+def loadDotEnv = {
+	def envFile = file('.env')
+	def envVars = [:]
+	if (envFile.exists()) {
+		envFile.eachLine { line ->
+			line = line.trim()
+			if (line && !line.startsWith('#') && line.contains('=')) {
+				def (key, value) = line.split('=', 2)
+				envVars[key.trim()] = value.trim()
+			}
+		}
+	}
+	return envVars
+}
+
+tasks.named('bootRun') {
+	environment loadDotEnv()
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
+	environment loadDotEnv()
 }
