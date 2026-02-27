@@ -1,13 +1,22 @@
 import { useEffect, useState } from 'react'
 import api from './services/api'
+import TableFloor from './components/TableFloor'
 
 interface SeatingType {
   id: number
   type: string
 }
 
+interface Seating {
+    id: number,
+    name: string,
+    typeId: number,
+    maxPeople: number
+}
+
 function App() {
   const [seatingTypes, setSeatingTypes] = useState<SeatingType[]>([])
+    const [seatings, setSeatings] = useState<Seating[]>([])
 
   useEffect(() => {
     api.get<SeatingType[]>('/seating-type')
@@ -15,14 +24,17 @@ function App() {
       .catch(error => console.error(error))
   }, [])
 
+    useEffect(() => {
+        api.get<Seating[]>('/seating')
+            .then(response => {console.log(response.data)
+                setSeatings(response.data)})
+            .catch(error => console.log(error))
+    }, []);
+
   return (
     <>
-      <p>Hello</p>
-      <ul>
-        {seatingTypes.map(seatingType => (
-          <li key={seatingType.id}>{seatingType.type}</li>
-        ))}
-      </ul>
+      <h1 style={{ padding: '16px 24px', margin: 0 }}>Restaurant Floor</h1>
+      <TableFloor seatings={seatings} seatingTypes={seatingTypes} />
     </>
   )
 }

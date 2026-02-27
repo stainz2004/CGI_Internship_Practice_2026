@@ -1,0 +1,48 @@
+.floor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+    padding: 24px;
+    background-color: #f0ece4;
+    min-height: 100vh;
+}
+
+.table-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 16px 12px;
+    background-color: #8b5e3c;
+    border-radius: 12px;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    min-height: 120px;
+    max-height: 200px;
+}
+
+.table-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.table-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.table-type {
+    font-size: 0.8rem;
+    opacity: 0.85;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.table-capacity {
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
