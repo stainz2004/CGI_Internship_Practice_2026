@@ -1,5 +1,6 @@
 package org.example.backend.mapper;
 
+import org.example.backend.dto.SeatingFilterResponseDto;
 import org.example.backend.dto.SeatingResponseDto;
 import org.example.backend.entity.Seating;
 import org.mapstruct.Mapper;
@@ -14,4 +15,7 @@ public interface SeatingMapper {
     SeatingResponseDto toResponseDto(Seating seating);
 
     List<SeatingResponseDto> toResponseDto(List<Seating> seating);
+
+    @Mapping(target = "matchesFilter", expression = "java(true)")
+    SeatingFilterResponseDto toFilterResponseDto(Seating seating);
 }

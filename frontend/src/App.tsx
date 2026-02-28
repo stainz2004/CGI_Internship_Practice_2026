@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import api from './services/api'
 import TableFloor from './components/TableFloor'
+import Filtering from './components/Filtering'
 
 interface SeatingType {
   id: number
@@ -14,9 +15,15 @@ interface Seating {
     maxPeople: number
 }
 
+interface SeatingFilterResult {
+  id: number
+  matchesFilter: boolean
+}
+
 function App() {
   const [seatingTypes, setSeatingTypes] = useState<SeatingType[]>([])
-    const [seatings, setSeatings] = useState<Seating[]>([])
+  const [seatings, setSeatings] = useState<Seating[]>([])
+  const [filterResults, setFilterResults] = useState<SeatingFilterResult[]>([])
 
   useEffect(() => {
     api.get<SeatingType[]>('/seating-type')
@@ -34,7 +41,8 @@ function App() {
   return (
     <>
       <h1 style={{ padding: '16px 24px', margin: 0 }}>Restaurant Floor</h1>
-      <TableFloor seatings={seatings} seatingTypes={seatingTypes} />
+      <Filtering seatingTypes={seatingTypes} onFilterResults={setFilterResults} />
+      <TableFloor seatings={seatings} seatingTypes={seatingTypes} filterResults={filterResults} />
     </>
   )
 }
