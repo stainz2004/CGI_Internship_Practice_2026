@@ -7,6 +7,7 @@ import org.example.backend.entity.Seating;
 import org.example.backend.mapper.SeatingMapper;
 import org.example.backend.repository.SeatingRepository;
 import org.example.backend.specification.SeatingSpecification;
+import org.springframework.beans.factory.BeanRegistry;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class SeatingService {
     public List<SeatingFilterResponseDto> getFilteredSeating(LocalDateTime dateAndTime, int numberOfPeople, Long seatingTypeId) {
         List<Seating> allSeatings = seatingRepository.findAll();
 
-        Specification<Seating> spec = SeatingSpecification.matchesFilter(dateAndTime, numberOfPeople, seatingTypeId);
+        Specification<Seating> spec = SeatingSpecification.matchesFilter(dateAndTime, numberOfPeople);
         List<Long> matchingIds = seatingRepository.findAll(spec)
                 .stream()
                 .map(Seating::getId)
@@ -46,7 +47,7 @@ public class SeatingService {
     }
 
     public List<SeatingFilterResponseDto> getMostMatchingSeating(LocalDateTime dateAndTime, int numberOfPeople, Long seatingTypeId) {
-        Specification<Seating> spec = SeatingSpecification.matchesFilter(dateAndTime, numberOfPeople, null);
+        Specification<Seating> spec = SeatingSpecification.matchesFilter(dateAndTime, numberOfPeople);
         List<Seating> matchingSeatings = seatingRepository.findAll(spec);
 
         if (matchingSeatings.isEmpty()) {
@@ -58,6 +59,18 @@ public class SeatingService {
                 .orElseThrow();
 
         return List.of(seatingMapper.toFilterResponseDto(mostMatchingSeating));
+    }
+
+    public List<Long> getBookedSeatings(LocalDateTime dateAndTime) {
+        if (dateAndTime == null) {
+            throw new IllegalArgumentException("Date and time can not be empty!");
+        }
+
+        Specification<Seating> spec = SeatingSpecification.isBookedAt(dateAndTime);
+
+        List<Seating> bookedSeatings = seatingRepository.findAll(spec);
+
+        return bookedSeatings.stream().map(Seating::getId).toList();
     }
 
     private double calculateScore(Seating seating, int numberOfPeople, Long seatingTypeId) {
