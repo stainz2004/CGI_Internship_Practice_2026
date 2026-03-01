@@ -24,6 +24,7 @@ function App() {
   const [seatingTypes, setSeatingTypes] = useState<SeatingType[]>([])
   const [seatings, setSeatings] = useState<Seating[]>([])
   const [filterResults, setFilterResults] = useState<SeatingFilterResult[]>([])
+  const [bookedIds, setBookedIds] = useState<number[]>([]);
 
   useEffect(() => {
     api.get<SeatingType[]>('/seating-type')
@@ -41,8 +42,8 @@ function App() {
   return (
     <>
       <h1 style={{ padding: '16px 24px', margin: 0 }}>Restaurant Floor</h1>
-      <Filtering seatingTypes={seatingTypes} onFilterResults={setFilterResults} />
-      <TableFloor seatings={seatings} seatingTypes={seatingTypes} filterResults={filterResults} />
+      <Filtering seatingTypes={seatingTypes} onFilterResults={setFilterResults} onFilterBookedResults={setBookedIds} />
+      <TableFloor seatings={seatings} seatingTypes={seatingTypes} filterResults={filterResults} filterResultsBooked={bookedIds} />
     </>
   )
 }

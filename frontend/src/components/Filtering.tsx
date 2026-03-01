@@ -1,5 +1,5 @@
 import api from '../services/api'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface SeatingType {
     id: number
@@ -15,12 +15,28 @@ interface SeatingFilterResult {
 interface FilteringProps {
     seatingTypes: SeatingType[]
     onFilterResults: (results: SeatingFilterResult[]) => void
+    onFilterBookedResults: (results : number[]) => void
 }
 
-function Filtering({ seatingTypes, onFilterResults }: FilteringProps) {
+function Filtering({ seatingTypes, onFilterResults, onFilterBookedResults }: FilteringProps) {
     const [dateAndTime, setDateAndTime] = useState<string>('')
     const [numberOfPeople, setNumberOfPeople] = useState<number>(1)
     const [seatingTypeId, setSeatingTypeId] = useState<number | ''>('')
+
+    useEffect(() => {
+        if (!dateAndTime) return
+
+        const formattedDate = `${dateAndTime}:00`
+
+        api.get<SeatingFilterResult[]>('/seating/filter/booked', {
+            params: {
+                dateAndTime: formattedDate
+            }
+        })
+            .then(response => onFilterResults(response.data))
+            .catch(error => console.log(error))
+
+    }, [dateAndTime])
 
     const handleFilter = () => {
         const formattedDate = dateAndTime ? `${dateAndTime}:00` : undefined

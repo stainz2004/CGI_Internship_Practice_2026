@@ -22,9 +22,10 @@ interface Props {
   seatings: Seating[]
   seatingTypes: SeatingType[]
   filterResults: SeatingFilterResult[]
+  filterResultsBooked: number[]
 }
 
-function TableFloor({ seatings, seatingTypes, filterResults }: Props) {
+function TableFloor({ seatings, seatingTypes, filterResults, filterResultsBooked }: Props) {
   const getTypeName = (typeId: number) => {
     return seatingTypes.find(t => t.id === typeId)?.type ?? 'Unknown'
   }
