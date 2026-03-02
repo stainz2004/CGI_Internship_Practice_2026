@@ -20,13 +20,15 @@ interface FilteringProps {
     seatingPreferences: SeatingPreference[]
     onFilterResults: (results: SeatingFilterResult[]) => void
     onFilterBookedResults: (results : number[]) => void
+    refreshKey: number
 }
 
-function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilterBookedResults }: FilteringProps) {
+function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilterBookedResults, refreshKey }: FilteringProps) {
     const [dateAndTime, setDateAndTime] = useState<string>('')
     const [numberOfPeople, setNumberOfPeople] = useState<number>(1)
     const [seatingTypeId, setSeatingTypeId] = useState<number | ''>('')
     const [selectedPreference, setSelectedPreference] = useState<number | ''>('')
+    const [lastAction, setLastAction] = useState<'filter' | 'suggest' | null>(null)
 
     useEffect(() => {
         if (!dateAndTime) return
@@ -41,7 +43,13 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
             .then(response => onFilterBookedResults(response.data))
             .catch(error => alert(error.response?.data?.message ?? error.message))
 
-    }, [dateAndTime])
+    }, [dateAndTime, refreshKey])
+
+    useEffect(() => {
+        if (!lastAction || !dateAndTime) return
+        if (lastAction === 'filter') handleFilter()
+        if (lastAction === 'suggest') handleSuggest()
+    }, [refreshKey])
 
     const handleSuggest = () => {
         if (!dateAndTime || !numberOfPeople) {
@@ -59,7 +67,10 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
                 ...(selectedPreference !== '' && {selectedPreference})
             }
         })
-            .then(response => onFilterResults(response.data))
+            .then(response => {
+                onFilterResults(response.data)
+                setLastAction('suggest')
+            })
             .catch(error => alert(error.response?.data?.message ?? error.message))
     }
 
@@ -74,7 +85,10 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
                 ...(selectedPreference !== '' && {selectedPreference})
             }
         })
-            .then(response => onFilterResults(response.data))
+            .then(response => {
+                onFilterResults(response.data)
+                setLastAction('filter')
+            })
             .catch(error => alert(error.response?.data?.message ?? error.message))
 
     }

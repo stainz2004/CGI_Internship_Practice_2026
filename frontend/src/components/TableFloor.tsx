@@ -29,9 +29,10 @@ interface Props {
   seatingPreferences: SeatingPreference[]
   filterResults: SeatingFilterResult[]
   filterResultsBooked: number[]
+  onSelectSeating: (id: number) => void
 }
 
-function TableFloor({ seatings, seatingTypes, seatingPreferences, filterResults, filterResultsBooked }: Props) {
+function TableFloor({ seatings, seatingTypes, seatingPreferences, filterResults, filterResultsBooked, onSelectSeating }: Props) {
 
   const getTypeName = (typeId: number) => {
     return seatingTypes.find(t => t.id === typeId)?.type ?? 'Unknown'
@@ -52,7 +53,7 @@ function TableFloor({ seatings, seatingTypes, seatingPreferences, filterResults,
   return (
     <div className="floor-grid">
       {seatings.map(seating => (
-        <div key={seating.id} className="table-card" style={getCardStyle(seating.id)}>
+        <div key={seating.id} className="table-card" style={{ ...getCardStyle(seating.id), cursor: 'pointer' }} onClick={() => onSelectSeating(seating.id)}>
           <span className="table-name">{seating.name}</span>
           <span className="table-type">{getTypeName(seating.typeId)}</span>
           <span className="table-preferences">
