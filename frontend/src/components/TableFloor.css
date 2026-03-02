@@ -46,3 +46,13 @@
     margin-top: 4px;
 }
 
+.table-preferences {
+    font-size: 0.9rem;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+}
+

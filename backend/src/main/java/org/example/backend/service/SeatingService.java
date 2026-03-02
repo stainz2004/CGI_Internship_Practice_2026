@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.dto.SeatingFilterResponseDto;
 import org.example.backend.dto.SeatingResponseDto;
 import org.example.backend.entity.Seating;
+import org.example.backend.entity.SeatingPreference;
 import org.example.backend.exception.SeatingNotFoundException;
 import org.example.backend.mapper.SeatingMapper;
 import org.example.backend.repository.SeatingRepository;
@@ -29,7 +30,6 @@ public class SeatingService {
     public List<SeatingFilterResponseDto> getFilteredSeating(LocalDateTime dateAndTime, int numberOfPeople, Long seatingTypeId, Long seatingPreferenceId) {
         List<Seating> allSeatings = seatingRepository.findAll();
 
-        System.out.println(seatingPreferenceId);
         Specification<Seating> spec = SeatingSpecification.matchesFilter(dateAndTime, numberOfPeople, seatingTypeId, seatingPreferenceId);
         List<Long> matchingIds = seatingRepository.findAll(spec)
                 .stream()
@@ -54,11 +54,16 @@ public class SeatingService {
             throw new SeatingNotFoundException("No matching seating found for the given filters");
         }
 
-        Seating mostMatchingSeating = matchingSeatings.stream()
-                .max(Comparator.comparingDouble(s -> calculateScore(s, numberOfPeople, seatingTypeId, seatingPreferenceId)))
+        double maxScore = matchingSeatings.stream()
+                .mapToDouble(s -> calculateScore(s, numberOfPeople, seatingTypeId, seatingPreferenceId))
+                .max()
                 .orElseThrow();
 
-        return List.of(seatingMapper.toFilterResponseDto(mostMatchingSeating));
+        List<Seating> mostMatchingSeatings = matchingSeatings.stream()
+                .filter(s -> calculateScore(s, numberOfPeople, seatingTypeId, seatingPreferenceId) == maxScore)
+                .toList();
+
+        return seatingMapper.toFilterResponseDto(mostMatchingSeatings);
     }
 
     public List<Long> getBookedSeatings(LocalDateTime dateAndTime) {
@@ -76,7 +81,15 @@ public class SeatingService {
     private double calculateScore(Seating seating, int numberOfPeople, Long seatingTypeId, Long seatingPreferenceId) {
         double score = 9.0 * (numberOfPeople / (double) seating.getMaxPeople());
         if (seatingTypeId != null && seatingTypeId.equals(seating.getSeatingType().getId())) {
-            score += 4;
+            score += 3;
+        }
+        // If normal match then add 3 BUT if filtered by wheelchair accessible then that should be nr1 priority.
+        if (seatingPreferenceId != null && seating.getPreferences().stream().map(SeatingPreference::getId).toList().contains(seatingPreferenceId)) {
+            score += seating.getPreferences().stream()
+                    .filter(p -> p.getId().equals(seatingPreferenceId))
+                    .findFirst()
+                    .map(p -> "Wheelchair Accessible".equalsIgnoreCase(p.getName()) ? 100.0 : 3.0)
+                    .orElse(0.0);
         }
         return score;
     }

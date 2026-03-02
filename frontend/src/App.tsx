@@ -9,15 +9,15 @@ interface SeatingType {
 }
 
 interface SeatingPreference {
-    id: number,
+    id: number
     name: string
 }
 
 interface Seating {
-    id: number,
-    name: string,
-    typeId: number,
-    maxPeople: number,
+    id: number
+    name: string
+    typeId: number
+    maxPeople: number
     preferenceIds: number[]
 }
 
@@ -56,7 +56,7 @@ function App() {
     <>
       <h1 style={{ padding: '16px 24px', margin: 0 }}>Restaurant Floor</h1>
       <Filtering seatingTypes={seatingTypes} seatingPreferences={seatingPreferences} onFilterResults={setFilterResults} onFilterBookedResults={setBookedIds} />
-      <TableFloor seatings={seatings} seatingTypes={seatingTypes} filterResults={filterResults} filterResultsBooked={bookedIds} />
+      <TableFloor seatings={seatings} seatingTypes={seatingTypes} seatingPreferences={seatingPreferences} filterResults={filterResults} filterResultsBooked={bookedIds} />
     </>
   )
 }
