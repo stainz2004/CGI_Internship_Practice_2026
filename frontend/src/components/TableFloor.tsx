@@ -26,14 +26,16 @@ interface Props {
 }
 
 function TableFloor({ seatings, seatingTypes, filterResults, filterResultsBooked }: Props) {
+
   const getTypeName = (typeId: number) => {
     return seatingTypes.find(t => t.id === typeId)?.type ?? 'Unknown'
   }
 
   const getCardStyle = (id: number): React.CSSProperties => {
+    if (filterResultsBooked.includes(id)) return { backgroundColor: '#f7c5c5' }
     if (filterResults.length === 0) return {}
     const result = filterResults.find(r => r.id === id)
-    if (!result || !result.matchesFilter) return {}
+    if (!result?.matchesFilter) return {}
     return { backgroundColor: '#c8f7c5'}
   }
 

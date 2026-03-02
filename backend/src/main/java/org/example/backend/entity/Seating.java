@@ -5,10 +5,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,4 +27,11 @@ public class Seating {
     @JoinColumn(name = "type_id")
     private SeatingType seatingType;
     private int maxPeople;
+    @ManyToMany
+    @JoinTable(
+            name = "seating_seating_preference",
+            joinColumns = @JoinColumn(name = "seating_id"),
+            inverseJoinColumns = @JoinColumn(name = "preference_id")
+    )
+    private Set<SeatingPreference> preferences;
 }

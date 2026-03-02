@@ -53,4 +53,34 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="26.02.2026-4" author="Sander R">
+        <createTable tableName="seating_preference">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="26.02.2026-5" author="Sander R">
+        <createTable tableName="seating_seating_preference">
+            <column name="seating_id" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="fk_ssp_seating"
+                             references="seating(id)"/>
+            </column>
+            <column name="preference_id" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="fk_ssp_preference"
+                             references="seating_preference(id)"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="seating_seating_preference"
+                       columnNames="seating_id, preference_id"
+                       constraintName="pk_seating_seating_preference"/>
+    </changeSet>
 </databaseChangeLog>

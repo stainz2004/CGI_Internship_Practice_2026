@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/seating/")
+@RequestMapping("/api/seating")
 @RequiredArgsConstructor
 public class SeatingController {
 
@@ -25,21 +25,23 @@ public class SeatingController {
         return ResponseEntity.ok().body(seatingService.getAllSeating());
     }
 
-    @GetMapping("filter")
+    @GetMapping("/filter")
     public ResponseEntity<List<SeatingFilterResponseDto>> getAllSeatingFilter(@RequestParam(required = false) LocalDateTime dateAndTime,
                                                                               @RequestParam(required = false) Integer numberOfPeople,
-                                                                              @RequestParam(required = false) Long seatingTypeId) {
-        return ResponseEntity.ok().body(seatingService.getFilteredSeating(dateAndTime, numberOfPeople, seatingTypeId));
+                                                                              @RequestParam(required = false) Long seatingTypeId,
+                                                                              @RequestParam(required = false) Long selectedPreference) {
+        return ResponseEntity.ok().body(seatingService.getFilteredSeating(dateAndTime, numberOfPeople, seatingTypeId, selectedPreference));
     }
 
-    @GetMapping("filter/suggest")
+    @GetMapping("/filter/suggest")
     public ResponseEntity<List<SeatingFilterResponseDto>> getMostMatchingSeating(@RequestParam(required = false) LocalDateTime dateAndTime,
-                                                                           @RequestParam(required = false) Integer numberOfPeople,
-                                                                           @RequestParam(required = false) Long seatingTypeId) {
-        return ResponseEntity.ok().body(seatingService.getMostMatchingSeating(dateAndTime, numberOfPeople, seatingTypeId));
+                                                                                 @RequestParam(required = false) Integer numberOfPeople,
+                                                                                 @RequestParam(required = false) Long seatingTypeId,
+                                                                                 @RequestParam(required = false) Long selectedPreference) {
+        return ResponseEntity.ok().body(seatingService.getMostMatchingSeating(dateAndTime, numberOfPeople, seatingTypeId, selectedPreference));
     }
 
-    @GetMapping("filter/booked")
+    @GetMapping("/filter/booked")
     public ResponseEntity<List<Long>> getBookedSeatings(@RequestParam LocalDateTime dateAndTime) {
         return ResponseEntity.ok().body(seatingService.getBookedSeatings(dateAndTime));
     }

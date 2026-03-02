@@ -12,6 +12,7 @@ import java.util.List;
 public interface SeatingMapper {
 
     @Mapping(source = "seatingType.id", target = "typeId")
+    @Mapping(target = "preferenceIds", expression = "java(seating.getPreferences().stream().map(p -> p.getId()).collect(java.util.stream.Collectors.toList()))")
     SeatingResponseDto toResponseDto(Seating seating);
 
     List<SeatingResponseDto> toResponseDto(List<Seating> seating);

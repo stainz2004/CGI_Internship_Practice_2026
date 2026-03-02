@@ -5,7 +5,6 @@ import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
 import org.example.backend.entity.Reservation;
 import org.example.backend.entity.Seating;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
@@ -18,12 +17,22 @@ public class SeatingSpecification {
 
     }
 
-    public static Specification<Seating> matchesFilter(LocalDateTime dateAndTime, int numberOfPeople) {
+    public static Specification<Seating> matchesFilter(LocalDateTime dateAndTime, int numberOfPeople, Long seatingTypeId, Long seatingPreferenceId) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
             if (numberOfPeople > 0) {
                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("maxPeople"), numberOfPeople));
+            }
+
+            if (seatingTypeId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("seatingType").get("id"), seatingTypeId));
+            }
+
+            if (seatingPreferenceId != null) {
+                predicates.add(criteriaBuilder.equal(
+                        root.join("preferences").get("id"), seatingPreferenceId
+                ));
             }
 
             if (dateAndTime != null) {

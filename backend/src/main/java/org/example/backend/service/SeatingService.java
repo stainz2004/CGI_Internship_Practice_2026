@@ -4,17 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.dto.SeatingFilterResponseDto;
 import org.example.backend.dto.SeatingResponseDto;
 import org.example.backend.entity.Seating;
+import org.example.backend.exception.SeatingNotFoundException;
 import org.example.backend.mapper.SeatingMapper;
 import org.example.backend.repository.SeatingRepository;
 import org.example.backend.specification.SeatingSpecification;
-import org.springframework.beans.factory.BeanRegistry;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -27,10 +26,11 @@ public class SeatingService {
         return seatingMapper.toResponseDto(seatingRepository.findAll());
     }
 
-    public List<SeatingFilterResponseDto> getFilteredSeating(LocalDateTime dateAndTime, int numberOfPeople, Long seatingTypeId) {
+    public List<SeatingFilterResponseDto> getFilteredSeating(LocalDateTime dateAndTime, int numberOfPeople, Long seatingTypeId, Long seatingPreferenceId) {
         List<Seating> allSeatings = seatingRepository.findAll();
 
-        Specification<Seating> spec = SeatingSpecification.matchesFilter(dateAndTime, numberOfPeople);
+        System.out.println(seatingPreferenceId);
+        Specification<Seating> spec = SeatingSpecification.matchesFilter(dateAndTime, numberOfPeople, seatingTypeId, seatingPreferenceId);
         List<Long> matchingIds = seatingRepository.findAll(spec)
                 .stream()
                 .map(Seating::getId)
@@ -46,16 +46,16 @@ public class SeatingService {
                 .toList();
     }
 
-    public List<SeatingFilterResponseDto> getMostMatchingSeating(LocalDateTime dateAndTime, int numberOfPeople, Long seatingTypeId) {
-        Specification<Seating> spec = SeatingSpecification.matchesFilter(dateAndTime, numberOfPeople);
+    public List<SeatingFilterResponseDto> getMostMatchingSeating(LocalDateTime dateAndTime, int numberOfPeople, Long seatingTypeId, Long seatingPreferenceId) {
+        Specification<Seating> spec = SeatingSpecification.matchesFilter(dateAndTime, numberOfPeople, null, null);
         List<Seating> matchingSeatings = seatingRepository.findAll(spec);
 
         if (matchingSeatings.isEmpty()) {
-            throw new NoSuchElementException("No matching seating found for the given filters");
+            throw new SeatingNotFoundException("No matching seating found for the given filters");
         }
 
         Seating mostMatchingSeating = matchingSeatings.stream()
-                .max(Comparator.comparingDouble(s -> calculateScore(s, numberOfPeople, seatingTypeId)))
+                .max(Comparator.comparingDouble(s -> calculateScore(s, numberOfPeople, seatingTypeId, seatingPreferenceId)))
                 .orElseThrow();
 
         return List.of(seatingMapper.toFilterResponseDto(mostMatchingSeating));
@@ -73,7 +73,7 @@ public class SeatingService {
         return bookedSeatings.stream().map(Seating::getId).toList();
     }
 
-    private double calculateScore(Seating seating, int numberOfPeople, Long seatingTypeId) {
+    private double calculateScore(Seating seating, int numberOfPeople, Long seatingTypeId, Long seatingPreferenceId) {
         double score = 9.0 * (numberOfPeople / (double) seating.getMaxPeople());
         if (seatingTypeId != null && seatingTypeId.equals(seating.getSeatingType().getId())) {
             score += 4;
