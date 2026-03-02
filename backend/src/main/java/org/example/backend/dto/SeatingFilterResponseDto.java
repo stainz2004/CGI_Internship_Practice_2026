@@ -5,5 +5,4 @@ import lombok.Data;
 @Data
 public class SeatingFilterResponseDto {
     private long id;
-    private boolean matchesFilter;
 }

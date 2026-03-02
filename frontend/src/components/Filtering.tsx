@@ -13,7 +13,6 @@ interface SeatingPreference {
 
 interface SeatingFilterResult {
     id: number
-    matchesFilter: boolean
 }
 
 interface FilteringProps {

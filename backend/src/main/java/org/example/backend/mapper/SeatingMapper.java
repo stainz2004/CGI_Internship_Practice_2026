@@ -17,9 +17,5 @@ public interface SeatingMapper {
 
     List<SeatingResponseDto> toResponseDto(List<Seating> seating);
 
-    @Mapping(target = "matchesFilter", expression = "java(true)")
-    SeatingFilterResponseDto toFilterResponseDto(Seating seating);
-
-    @Mapping(target = "matchesFilter", expression = "java(true)")
     List<SeatingFilterResponseDto> toFilterResponseDto(List<Seating> seating);
 }

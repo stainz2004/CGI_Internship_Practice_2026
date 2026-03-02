@@ -28,22 +28,11 @@ public class SeatingService {
     }
 
     public List<SeatingFilterResponseDto> getFilteredSeating(LocalDateTime dateAndTime, int numberOfPeople, Long seatingTypeId, Long seatingPreferenceId) {
-        List<Seating> allSeatings = seatingRepository.findAll();
 
         Specification<Seating> spec = SeatingSpecification.matchesFilter(dateAndTime, numberOfPeople, seatingTypeId, seatingPreferenceId);
-        List<Long> matchingIds = seatingRepository.findAll(spec)
-                .stream()
-                .map(Seating::getId)
-                .toList();
+        List<Seating> matchingSeatings = seatingRepository.findAll(spec);
 
-        return allSeatings.stream()
-                .map(seating -> {
-                    SeatingFilterResponseDto dto = new SeatingFilterResponseDto();
-                    dto.setId(seating.getId());
-                    dto.setMatchesFilter(matchingIds.contains(seating.getId()));
-                    return dto;
-                })
-                .toList();
+        return seatingMapper.toFilterResponseDto(matchingSeatings);
     }
 
     public List<SeatingFilterResponseDto> getMostMatchingSeating(LocalDateTime dateAndTime, int numberOfPeople, Long seatingTypeId, Long seatingPreferenceId) {

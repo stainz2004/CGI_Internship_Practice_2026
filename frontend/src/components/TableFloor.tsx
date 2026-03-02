@@ -21,7 +21,6 @@ interface Seating {
 
 interface SeatingFilterResult {
   id: number
-  matchesFilter: boolean
 }
 
 interface Props {
@@ -46,7 +45,7 @@ function TableFloor({ seatings, seatingTypes, seatingPreferences, filterResults,
     if (filterResultsBooked.includes(id)) return { backgroundColor: '#f7c5c5' }
     if (filterResults.length === 0) return {}
     const result = filterResults.find(r => r.id === id)
-    if (!result?.matchesFilter) return {}
+    if (!result) return {}
     return { backgroundColor: '#c8f7c5'}
   }
 
