@@ -35,7 +35,7 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
 
         const formattedDate = `${dateAndTime}:00`
 
-        api.get<number[]>('/seating/filter/booked', {
+        api.get<number[]>('/seatings/booked', {
             params: {
                 dateAndTime: formattedDate
             }
@@ -59,7 +59,7 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
 
         const formattedDate = dateAndTime ? `${dateAndTime}:00` : undefined
 
-        api.get<SeatingFilterResult[]>('/seating/filter/suggest', {
+        api.get<SeatingFilterResult[]>('/seatings/suggestions', {
             params: {
                 ...(formattedDate && {dateAndTime: formattedDate}),
                 numberOfPeople,
@@ -77,7 +77,7 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
     const handleFilter = () => {
         const formattedDate = dateAndTime ? `${dateAndTime}:00` : undefined
 
-        api.get<SeatingFilterResult[]>('/seating/filter', {
+        api.get<SeatingFilterResult[]>('/seatings/filter', {
             params: {
                 ...(formattedDate && {dateAndTime: formattedDate}),
                 numberOfPeople,

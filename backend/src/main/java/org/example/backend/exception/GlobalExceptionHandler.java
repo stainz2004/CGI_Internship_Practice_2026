@@ -3,13 +3,22 @@ package org.example.backend.exception;
 import org.example.backend.dto.ErrorResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ApplicationException.class)
+    public ResponseEntity<ErrorResponseDto> handleApplication(
+            ApplicationException ex) {
+        // Use the status code from the exception
+        return ResponseEntity.status(ex.getStatusCode()).body(new ErrorResponseDto(
+                ex.getStatusCode(), ex.getMessage()));
+    }
 
     @ExceptionHandler(SeatingNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleNotFound(SeatingNotFoundException ex) {

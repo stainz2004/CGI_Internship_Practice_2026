@@ -42,14 +42,14 @@ function App() {
   }, [])
 
     useEffect(() => {
-        api.get<Seating[]>('/seating')
+        api.get<Seating[]>('/seatings')
             .then(response => {console.log(response.data)
                 setSeatings(response.data)})
             .catch(error => alert(error.response?.data?.message ?? error.message))
     }, []);
 
     useEffect(() => {
-        api.get<SeatingPreference[]>('/seating/seating_preference')
+        api.get<SeatingPreference[]>('/seatings/seating_preference')
             .then(response => setSeatingPreferences(response.data))
             .catch(error => alert(error.response?.data?.message ?? error.message))
     }, []);
@@ -57,7 +57,7 @@ function App() {
     const handleBook = () => {
         if (!selectedSeatingId || !bookingTime) return;
         const formattedDate = `${bookingTime}:00`
-        api.post('/reservation', { seatingId: selectedSeatingId, startTime: formattedDate })
+        api.post('/reservations', { seatingId: selectedSeatingId, startTime: formattedDate })
             .then(() => {
                 alert('Booked successfully!');
                 setSelectedSeatingId(null);

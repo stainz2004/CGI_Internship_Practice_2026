@@ -1,6 +1,7 @@
 package org.example.backend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.dto.SeatingFilterDto;
 import org.example.backend.dto.SeatingFilterResponseDto;
 import org.example.backend.dto.SeatingResponseDto;
 import org.example.backend.entity.Seating;
@@ -13,7 +14,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -27,15 +27,20 @@ public class SeatingService {
         return seatingMapper.toResponseDto(seatingRepository.findAll());
     }
 
-    public List<SeatingFilterResponseDto> getFilteredSeating(LocalDateTime dateAndTime, int numberOfPeople, Long seatingTypeId, Long seatingPreferenceId) {
+    public List<SeatingFilterResponseDto> getFilteredSeating(SeatingFilterDto filterDTo) {
 
-        Specification<Seating> spec = SeatingSpecification.matchesFilter(dateAndTime, numberOfPeople, seatingTypeId, seatingPreferenceId);
+        Specification<Seating> spec = SeatingSpecification.matchesFilter(filterDTo.getDateAndTime(), filterDTo.getNumberOfPeople(), filterDTo.getSeatingTypeId(), filterDTo.getSelectedPreference());
         List<Seating> matchingSeatings = seatingRepository.findAll(spec);
 
         return seatingMapper.toFilterResponseDto(matchingSeatings);
     }
 
-    public List<SeatingFilterResponseDto> getMostMatchingSeating(LocalDateTime dateAndTime, int numberOfPeople, Long seatingTypeId, Long seatingPreferenceId) {
+    public List<SeatingFilterResponseDto> getMostMatchingSeating(SeatingFilterDto filterDTo) {
+        LocalDateTime dateAndTime = filterDTo.getDateAndTime();
+        int numberOfPeople = filterDTo.getNumberOfPeople();
+        Long seatingTypeId = filterDTo.getSeatingTypeId();
+        Long seatingPreferenceId = filterDTo.getSelectedPreference();
+
         Specification<Seating> spec = SeatingSpecification.matchesFilter(dateAndTime, numberOfPeople, null, null);
         List<Seating> matchingSeatings = seatingRepository.findAll(spec);
 
@@ -60,11 +65,14 @@ public class SeatingService {
             throw new IllegalArgumentException("Date and time can not be empty!");
         }
 
-        Specification<Seating> spec = SeatingSpecification.isBookedAt(dateAndTime);
-
-        List<Seating> bookedSeatings = seatingRepository.findAll(spec);
-
-        return bookedSeatings.stream().map(Seating::getId).toList();
+        return seatingRepository
+                .findByReservations_StartTimeLessThanEqualAndReservations_EndTimeGreaterThanEqual(
+                        dateAndTime,
+                        dateAndTime
+                )
+                .stream()
+                .map(Seating::getId)
+                .toList();
     }
 
     private double calculateScore(Seating seating, int numberOfPeople, Long seatingTypeId, Long seatingPreferenceId) {

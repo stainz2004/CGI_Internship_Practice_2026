@@ -8,10 +8,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -34,4 +37,6 @@ public class Seating {
             inverseJoinColumns = @JoinColumn(name = "preference_id")
     )
     private Set<SeatingPreference> preferences;
+    @OneToMany(mappedBy = "seating")
+    private List<Reservation> reservations = new ArrayList<>();
 }

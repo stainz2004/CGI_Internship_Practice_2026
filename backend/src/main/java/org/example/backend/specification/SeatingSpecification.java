@@ -41,27 +41,13 @@ public class SeatingSpecification {
                 subquery.select(reservationRoot.get("seating").get("id"))
                         .where(
                                 criteriaBuilder.equal(reservationRoot.get("seating").get("id"), root.get("id")),
-                                criteriaBuilder.lessThan(reservationRoot.get("startTime"), dateAndTime),
-                                criteriaBuilder.greaterThan(reservationRoot.get("endTime"), dateAndTime)
+                                criteriaBuilder.lessThanOrEqualTo(reservationRoot.get("startTime"), dateAndTime),
+                                criteriaBuilder.greaterThanOrEqualTo(reservationRoot.get("endTime"), dateAndTime)
                         );
                 predicates.add(criteriaBuilder.not(criteriaBuilder.exists(subquery)));
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-        };
-    }
-
-    public static Specification<Seating> isBookedAt(LocalDateTime dateAndTime) {
-        return (root, query, criteriaBuilder) -> {
-            Subquery<Long> subquery = query.subquery(Long.class);
-            Root<Reservation> reservationRoot = subquery.from(Reservation.class);
-            subquery.select(reservationRoot.get("seating").get("id"))
-                    .where(
-                            criteriaBuilder.equal(reservationRoot.get("seating").get("id"), root.get("id")),
-                            criteriaBuilder.lessThan(reservationRoot.get("startTime"), dateAndTime),
-                            criteriaBuilder.greaterThan(reservationRoot.get("endTime"), dateAndTime)
-                    );
-            return criteriaBuilder.exists(subquery);
         };
     }
 }
