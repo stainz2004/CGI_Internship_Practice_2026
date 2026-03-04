@@ -30,15 +30,11 @@ Lisasin ka exceptionid juhtudeks kui broneering kattub teise broneeringuga või 
 
 Selle ülesande lahendamiseks kokku läks umbes 12 tundi.
 
-Terve projekti puhul kõige keerulisem oli struktuuri väljamõtlemine. Oli erinevaid ideid, kuidas ma andmebaasi struktureerin või
-kuidas display/filter/suggestione teha. Nende puhul panin kirja erinevad variandid, kuidas oleks võimalik teha ja siis mõnel korral
-arutasim ka LLM'iga, et kuidas kõige mõistlikum oleks teha.
+Terve projekti puhul oli minu jaoks kõige keerulisem osa süsteemi struktuuri läbimõtlemine. Pidin otsustama, kuidas andmebaas kõige mõistlikumalt üles ehitada ning kuidas realiseerida laudade kuvamine, filtreerimine ja soovitamine. Selle puhul panin kõik variandid eraldi kirja ja siis valisin neist kõige paremini tunduvad idee. Kasutasin ka nõrkuste/tugevuste vaatamiseks LLMi abi.
 
-Kõige keerulisem backendi puhul minu jaoks oli teblite ühendamine. Kuna kasutasin eraldi tabelit Reservation, siis kuidas
-leida neid vahemikke millal midagi hõivatud on.
+Backendi poolel osutus kõige keerulisemaks tabelite omavaheline sidumine ja broneeringute ajavahemike kontrollimine. Kuna kasutasin eraldi **Reservation tabelit**, tuli lahendada loogika, kuidas tuvastada ajavahemikud, mil laud on juba hõivatud.
 
-Kõige keerulisem frontendi puhul oli veebilehe disain ja ülesehitus. Selle puhul pidin tihti abi küsima LLM'ilt, et kuidas täpselt
-saaksin siin sellist popupi teha (nt bookingu puhul, kui tekiberaldi aken).
+Frontendi poolel oli minu jaoks kõige keerulisem veebilehe disaini ja kasutajaliidese ülesehitus. Eriti keeruline oli interaktiivsete elementide loomine, näiteks broneerimise puhul avanev eraldi aken (popup või modal), kus kasutaja saab valida broneeringu aja.
 
 ---
 
@@ -54,8 +50,6 @@ Andmebaas töötab PostgreSQL-i konteineris. Käivita see käsuga:
 cd backend
 docker compose up -d
 ```
-
-> **Kontrolli**, et Docker Desktop on käivitatud enne selle käsu jooksutamist.
 
 ---
 
@@ -74,10 +68,6 @@ Windowsil:
 cd backend
 gradlew.bat bootRun
 ```
-
-Backend käivitub aadressil: **http://localhost:8080**
-
-> Rakendus kasutab **Liquibase**'i, mis loob andmebaasi tabelid automaatselt käivitamisel.
 
 ---
 

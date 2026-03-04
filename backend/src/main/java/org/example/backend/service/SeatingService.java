@@ -80,12 +80,12 @@ public class SeatingService {
         if (seatingTypeId != null && seatingTypeId.equals(seating.getSeatingType().getId())) {
             score += 3;
         }
-        // If normal match then add 3 BUT if filtered by wheelchair accessible then that should be nr1 priority.
+        // If normal match then add 3 BUT if filtered by "Ratastooliga ligipääsetav" then that should be nr1 priority.
         if (seatingPreferenceId != null && seating.getPreferences().stream().map(SeatingPreference::getId).toList().contains(seatingPreferenceId)) {
             score += seating.getPreferences().stream()
                     .filter(p -> p.getId().equals(seatingPreferenceId))
                     .findFirst()
-                    .map(p -> "Wheelchair Accessible".equalsIgnoreCase(p.getName()) ? 100.0 : 3.0)
+                    .map(p -> "Ratastooliga ligipääsetav".equalsIgnoreCase(p.getName()) ? 100.0 : 3.0)
                     .orElse(0.0);
         }
         return score;
