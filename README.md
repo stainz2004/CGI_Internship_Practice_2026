@@ -42,9 +42,7 @@ saaksin siin sellist popupi teha (nt bookingu puhul, kui tekiberaldi aken).
 
 ---
 
-## 🚀 Projekti käivitamise juhend
-
-Järgnevad sammud aitavad täiesti uuel arendajal projekti kohalikult tööle saada.
+## Projekti käivitamise juhend
 
 ---
 
