@@ -36,6 +36,7 @@ Backendi poolel osutus kõige keerulisemaks tabelite omavaheline sidumine ja bro
 
 Frontendi poolel oli minu jaoks kõige keerulisem veebilehe disaini ja kasutajaliidese ülesehitus. Eriti keeruline oli interaktiivsete elementide loomine, näiteks broneerimise puhul avanev eraldi aken (popup või modal), kus kasutaja saab valida broneeringu aja.
 
+Üleüldiselt kõige keerulisem oli projekti käivitamise juhendi tegemine. Kuna ma ise kirjutan projekte, nii et mul on frontend ja backend eraldi projektidena avatud siis töötavad nad palju kergemalt. Database connectioni teen ka tavaliselt intellij IDEAs ära läbi uue datasource tegemise ja siis changelog-master.xml file manuaalse jooksutamisega. Ma ei teadnud kas see on piisav selle projekti puhul, nii et proovisin leida lihtsamat lahendust, et saaks lihtsalt commandidega üles saada.
 ---
 
 ## Projekti käivitamise juhend
