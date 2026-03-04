@@ -1,5 +1,6 @@
 import api from '../services/api'
 import { useState, useEffect } from 'react'
+import './Filtering.css'
 
 interface SeatingType {
     id: number
@@ -94,55 +95,55 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
     }
 
     return (
-        <div>
-            <div>
-                <label>
-                    Date & Time:
-                    <input
-                        type="datetime-local"
-                        value={dateAndTime}
-                        onChange={e => setDateAndTime(e.target.value)}
-                    />
-                </label>
+        <div className="filtering-bar">
+            <div className="filter-field">
+                <label>Date & Time</label>
+                <input
+                    type="datetime-local"
+                    value={dateAndTime}
+                    onChange={e => setDateAndTime(e.target.value)}
+                />
+            </div>
 
-                <label>
-                    Number of People:
-                    <input
-                        type="number"
-                        min={1}
-                        value={numberOfPeople}
-                        onChange={e => setNumberOfPeople(Number(e.target.value))}
-                    />
-                </label>
+            <div className="filter-field">
+                <label>Number of People</label>
+                <input
+                    type="number"
+                    min={1}
+                    value={numberOfPeople}
+                    onChange={e => setNumberOfPeople(Number(e.target.value))}
+                />
+            </div>
 
-                <label>
-                    Seating Type:
-                    <select
-                        value={seatingTypeId}
-                        onChange={e => setSeatingTypeId(e.target.value === '' ? '' : Number(e.target.value))}
-                    >
-                        <option value="">Any</option>
-                        {seatingTypes.map(st => (
-                            <option key={st.id} value={st.id}>{st.type}</option>
-                        ))}
-                    </select>
-                </label>
+            <div className="filter-field">
+                <label>Seating Area</label>
+                <select
+                    value={seatingTypeId}
+                    onChange={e => setSeatingTypeId(e.target.value === '' ? '' : Number(e.target.value))}
+                >
+                    <option value="">Any</option>
+                    {seatingTypes.map(st => (
+                        <option key={st.id} value={st.id}>{st.type}</option>
+                    ))}
+                </select>
+            </div>
 
-                <label>
-                    Seating preferences:
-                    <select
-                        value={selectedPreference}
-                        onChange={e => setSelectedPreference(e.target.value === '' ? '' : Number(e.target.value))}
-                    >
-                        <option value="">Any</option>
-                        {seatingPreferences.map(sp => (
-                            <option key={sp.id} value={sp.id}>{sp.name}</option>
-                        ))}
-                    </select>
-                </label>
+            <div className="filter-field">
+                <label>Seating Preferences</label>
+                <select
+                    value={selectedPreference}
+                    onChange={e => setSelectedPreference(e.target.value === '' ? '' : Number(e.target.value))}
+                >
+                    <option value="">Any</option>
+                    {seatingPreferences.map(sp => (
+                        <option key={sp.id} value={sp.id}>{sp.name}</option>
+                    ))}
+                </select>
+            </div>
 
-                <button onClick={handleFilter}>Filter</button>
-                <button onClick={handleSuggest}>Suggest a table</button>
+            <div className="filter-buttons">
+                <button className="btn-filter" onClick={handleFilter}>Filter</button>
+                <button className="btn-suggest" onClick={handleSuggest}>Suggest a table</button>
             </div>
         </div>
     )

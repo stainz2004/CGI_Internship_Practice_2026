@@ -1,4 +1,3 @@
-import React from 'react'
 import './TableFloor.css'
 
 interface SeatingType {
@@ -34,10 +33,6 @@ interface Props {
 
 function TableFloor({ seatings, seatingTypes, seatingPreferences, filterResults, filterResultsBooked, onSelectSeating }: Props) {
 
-  const getTypeName = (typeId: number) => {
-    return seatingTypes.find(t => t.id === typeId)?.type ?? 'Unknown'
-  }
-
   const getSeatingPreferenceName = (preferenceId: number) => {
     return seatingPreferences.find(p => p.id === preferenceId)?.name ?? 'Unknown'
   }
@@ -50,16 +45,27 @@ function TableFloor({ seatings, seatingTypes, seatingPreferences, filterResults,
     return { backgroundColor: '#c8f7c5'}
   }
 
+  const groupedByType = seatingTypes.map(type => ({
+    type,
+    seatings: seatings.filter(s => s.typeId === type.id),
+  })).filter(group => group.seatings.length > 0)
+
   return (
-    <div className="floor-grid">
-      {seatings.map(seating => (
-        <div key={seating.id} className="table-card" style={{ ...getCardStyle(seating.id), cursor: 'pointer' }} onClick={() => onSelectSeating(seating.id)}>
-          <span className="table-name">{seating.name}</span>
-          <span className="table-type">{getTypeName(seating.typeId)}</span>
-          <span className="table-preferences">
-            {seating.preferenceIds.map(id => getSeatingPreferenceName(id)).join(', ')}
-          </span>
-          <span className="table-capacity">👥 {seating.maxPeople}</span>
+    <div className="floor-sections">
+      {groupedByType.map(({ type, seatings: group }) => (
+        <div key={type.id} className="floor-section">
+          <h2 className="section-title">{type.type}</h2>
+          <div className="floor-grid">
+            {group.map(seating => (
+              <div key={seating.id} className="table-card" style={{ ...getCardStyle(seating.id) }} onClick={() => onSelectSeating(seating.id)}>
+                <span className="table-name">{seating.name}</span>
+                <span className="table-preferences">
+                  {seating.preferenceIds.map(id => getSeatingPreferenceName(id)).join(', ')}
+                </span>
+                <span className="table-capacity">👥 {seating.maxPeople}</span>
+              </div>
+            ))}
+          </div>
         </div>
       ))}
     </div>
