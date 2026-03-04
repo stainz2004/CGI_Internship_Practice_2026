@@ -36,7 +36,8 @@ Backendi poolel osutus kõige keerulisemaks tabelite omavaheline sidumine ja bro
 
 Frontendi poolel oli minu jaoks kõige keerulisem veebilehe disaini ja kasutajaliidese ülesehitus. Eriti keeruline oli interaktiivsete elementide loomine, näiteks broneerimise puhul avanev eraldi aken (popup või modal), kus kasutaja saab valida broneeringu aja.
 
-Üleüldiselt kõige keerulisem oli projekti käivitamise juhendi tegemine. Kuna ma ise kirjutan projekte, nii et mul on frontend ja backend eraldi projektidena avatud siis töötavad nad palju kergemalt. Database connectioni teen ka tavaliselt intellij IDEAs ära läbi uue datasource tegemise ja siis changelog-master.xml file manuaalse jooksutamisega. Ma ei teadnud kas see on piisav selle projekti puhul, nii et proovisin leida lihtsamat lahendust, et saaks lihtsalt commandidega üles saada.
+Üleüldiselt kõige keerulisem oli projekti käivitamise juhendi tegemine. Millegipärast ./gradlew BootRun kasutadse ei läinud liquibase käima ja database jäi tühjaks. Kuna ma ise kirjutan projekte, nii et mul on frontend ja backend eraldi projektidena avatud siis töötavad nad palju kergemalt. Database connectioni teen ka tavaliselt intellij IDEAs ära läbi uue datasource tegemise ja siis changelog-master.xml file manuaalse jooksutamisega. Ma ei teadnud kas see on piisav selle projekti puhul, nii et proovisin leida lihtsamat lahendust, et saaks lihtsalt commandidega üles saada.
+
 ---
 
 ## Projekti käivitamise juhend
@@ -56,25 +57,18 @@ docker compose up -d
 
 ## 2. Backend käivitamine (Spring Boot)
 
-Backend kasutab **Java 25** ja **Spring Boot 4** koos **Gradle** ehitustööriistaga.
+Backend kasutab **Java 25** ja **Spring Boot 4** koos **Gradle**.
 
 ```bash
 cd backend
 ./gradlew bootRun
 ```
 
-Windowsil:
-
-```bash
-cd backend
-gradlew.bat bootRun
-```
-
 ---
 
 ## 3. Frontend käivitamine (React + Vite)
 
-Frontend kasutab **React 19**, **TypeScript** ja **Vite**.
+Frontend kasutab **React**, **TypeScript** ja **Vite**.
 
 ### 3.1 Sõltuvuste installimine
 
@@ -83,7 +77,7 @@ cd frontend
 npm install
 ```
 
-### 3.2 Arendusserveri käivitamine
+### 3.2 Käivitamine
 
 ```bash
 npm run dev
