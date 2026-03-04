@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/seating-type")
+@RequestMapping("/api/seating-types")
 public class SeatingTypeController {
 
     private final SeatingTypeService seatingTypeService;

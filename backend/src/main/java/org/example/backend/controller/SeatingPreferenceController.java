@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/seating/seating_preference")
+@RequestMapping("/api/seatings/preferences")
 @RequiredArgsConstructor
 public class SeatingPreferenceController {
 
     private final SeatingPreferenceService seatingPreferenceService;
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<SeatingPreferenceResponseDto>> getSeatingPreferences() {
-        return ResponseEntity.ok().body(seatingPreferenceService.getSeatingPreferences());
+        return ResponseEntity.ok(seatingPreferenceService.getSeatingPreferences());
     }
 }

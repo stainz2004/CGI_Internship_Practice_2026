@@ -1,6 +1,5 @@
 package org.example.backend.dto;
 
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -12,6 +11,5 @@ public class AddReservationDto {
     private Long seatingId;
 
     @NotNull(message = "Start time is required")
-    @Future(message = "Reservation must be in the future")
     private LocalDateTime startTime;
 }

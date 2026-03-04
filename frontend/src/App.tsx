@@ -36,7 +36,7 @@ function App() {
   const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
-    api.get<SeatingType[]>('/seating-type')
+    api.get<SeatingType[]>('/seating-types')
       .then(response => setSeatingTypes(response.data))
       .catch(error => alert(error.response?.data?.message ?? error.message))
   }, [])
@@ -49,7 +49,7 @@ function App() {
     }, []);
 
     useEffect(() => {
-        api.get<SeatingPreference[]>('/seatings/seating_preference')
+        api.get<SeatingPreference[]>('/seatings/preferences')
             .then(response => setSeatingPreferences(response.data))
             .catch(error => alert(error.response?.data?.message ?? error.message))
     }, []);

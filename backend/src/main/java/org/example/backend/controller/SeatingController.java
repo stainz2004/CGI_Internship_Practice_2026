@@ -26,7 +26,7 @@ public class SeatingController {
         return ResponseEntity.ok(seatingService.getAllSeating());
     }
 
-    @GetMapping("filter")
+    @GetMapping("/filter")
     public ResponseEntity<List<SeatingFilterResponseDto>> getAllSeatingFilter(SeatingFilterDto filter) {
         return ResponseEntity.ok(seatingService.getFilteredSeating(filter));
     }
