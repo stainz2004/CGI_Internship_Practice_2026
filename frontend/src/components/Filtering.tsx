@@ -21,11 +21,17 @@ interface FilteringProps {
     seatingPreferences: SeatingPreference[]
     onFilterResults: (results: SeatingFilterResult[]) => void
     onFilterBookedResults: (results : number[]) => void
+    onDateAndTimeChange?: (value: string) => void
     refreshKey: number
 }
 
-function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilterBookedResults, refreshKey }: FilteringProps) {
+function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilterBookedResults, onDateAndTimeChange, refreshKey }: FilteringProps) {
     const [dateAndTime, setDateAndTime] = useState<string>('')
+
+    const handleDateAndTimeChange = (value: string) => {
+        setDateAndTime(value)
+        onDateAndTimeChange?.(value)
+    }
     const [numberOfPeople, setNumberOfPeople] = useState<number>(1)
     const [seatingTypeId, setSeatingTypeId] = useState<number | ''>('')
     const [selectedPreference, setSelectedPreference] = useState<number | ''>('')
@@ -101,7 +107,7 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
                 <input
                     type="datetime-local"
                     value={dateAndTime}
-                    onChange={e => setDateAndTime(e.target.value)}
+                    onChange={e => handleDateAndTimeChange(e.target.value)}
                 />
             </div>
 
