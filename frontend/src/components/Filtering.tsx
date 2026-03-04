@@ -97,7 +97,7 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
     return (
         <div className="filtering-bar">
             <div className="filter-field">
-                <label>Date & Time</label>
+                <label>Aeg</label>
                 <input
                     type="datetime-local"
                     value={dateAndTime}
@@ -106,7 +106,7 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
             </div>
 
             <div className="filter-field">
-                <label>Number of People</label>
+                <label>Inimeste arv</label>
                 <input
                     type="number"
                     min={1}
@@ -116,7 +116,7 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
             </div>
 
             <div className="filter-field">
-                <label>Seating Area</label>
+                <label>Tsoon</label>
                 <select
                     value={seatingTypeId}
                     onChange={e => setSeatingTypeId(e.target.value === '' ? '' : Number(e.target.value))}
@@ -129,7 +129,7 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
             </div>
 
             <div className="filter-field">
-                <label>Seating Preferences</label>
+                <label>Eelistus</label>
                 <select
                     value={selectedPreference}
                     onChange={e => setSelectedPreference(e.target.value === '' ? '' : Number(e.target.value))}
@@ -142,8 +142,8 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
             </div>
 
             <div className="filter-buttons">
-                <button className="btn-filter" onClick={handleFilter}>Filter</button>
-                <button className="btn-suggest" onClick={handleSuggest}>Suggest a table</button>
+                <button className="btn-filter" onClick={handleFilter}>Filtreeri</button>
+                <button className="btn-suggest" onClick={handleSuggest}>Soovita laud</button>
             </div>
         </div>
     )

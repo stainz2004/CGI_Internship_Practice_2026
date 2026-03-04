@@ -6,12 +6,9 @@ Lõin "Nutika Restorani Reserveerimissüsteemi".
 
 Selleks kasutasin nõutud Java Spring Boot ja viimast Java LTS versiooni. Frontend raamistikuks kasutasin Reacti koos Axiosega. Andmebaasiks kasutasin PostgreSQL ja LiquiBase tabelite haldamiseks.
 
-Seating (laud):
-- id
-- nimi
-- seatingType (tsoon)
-- maksimum arv inimesi
-- eelistused
+- Laud -> (Laud 1, Laud 2, jne)
+- Tsoon -> (VIP, Terrass, Sisesaal, Rõdu)
+- Eelistus -> (Vaikne nurk, Akna all, Ratastooliga ligipääsetav, Pime nurk)
 
 Broneering:
 - Igal laual võib olla mitu broneeringut, kuid need ei tohi ajaliselt kattuda.
@@ -22,7 +19,7 @@ Broneering:
 Lisasin ka broneerimise funktsionaalsuse. Lauale peale vajutades on võimalik lauda broneerida valitud kellajaks. Broneerides jälgib backend, et broneeringu algusest kuni lõpuni (2 tundi)
 ei kattuks teise broneeringuga.
 
-Soovituste loogika arvestab mitut tegurit, sealhulgas laua tsooni, maksimaalset inimeste arvu, võimalikke eelistusi ning seda, kui hästi laud vastab broneerijate arvule. Kui kasutaja on määranud spetsiifilise eelistuse, näiteks ratastooliga ligipääsetava laua, siis antakse sellele kriteeriumile algoritmis kõrgem prioriteet, kuna selline nõue võib olla broneerija jaoks hädavajalik.
+Soovituste loogika arvestab mitut tegurit, sealhulgas laua tsooni, maksimaalset inimeste arvu, võimalikke eelistusi ning seda, kui hästi laud vastab broneerijate arvule. Kui kasutaja on määranud spetsiifilise eelistuse, näiteks ratastooliga ligipääsetava laua, siis antakse sellele kriteeriumile algoritmis kõrgem prioriteet, kuna selline nõue võib olla broneerija jaoks hädavajalik. Igale lauale antakse skoor vastavalt sellele kui hästi vastab filtreeringule. Kui mitu lauda on sama skooriga siis soovitatakse kõiki.
 
 Laua filtreerimine ja soovitamine toimub täielikult backendi loogikas. Frontend ei tee arvutusi, vaid kuvab backendist saadud tulemused. Filtreerimise realiseerimiseks kasutasin Spring Data JPA Specification patternit.
 
