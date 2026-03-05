@@ -145,7 +145,7 @@
             <column name="preference_id" valueNumeric="3"/>
         </insert>
     </changeSet>
-    <changeSet id="26.02.2026-seed-5" author="Sander R" runOnChange="true">
+    <changeSet id="26.02.2026-seed-5" author="Sander R" runAlways="true">
         <delete tableName="reservation"/>
         <sql>
             INSERT INTO reservation (seating_id, start_time, end_time)
