@@ -25,6 +25,7 @@ Laua filtreerimine ja soovitamine toimub täielikult backendi loogikas. Frontend
 
 Lisasin ka exceptionid juhtudeks kui broneering kattub teise broneeringuga või kui filtrite põhjal ei leitud ühtegi vastavat lauda.
 
+---
 
 ## Tööks kulunud aeg ja keerulised aspektid
 
@@ -39,6 +40,31 @@ Frontendi poolel oli minu jaoks kõige keerulisem veebilehe disaini ja kasutajal
 Üleüldiselt kõige keerulisem oli projekti käivitamise juhendi tegemine. Millegipärast ./gradlew BootRun kasutadse ei läinud liquibase käima ja database jäi tühjaks. Kuna ma ise kirjutan projekte, nii et mul on frontend ja backend eraldi projektidena avatud siis töötavad nad palju kergemalt. Database connectioni teen ka tavaliselt intellij IDEAs ära läbi uue datasource tegemise ja siis changelog-master.xml file manuaalse jooksutamisega. Ma ei teadnud kas see on piisav selle projekti puhul, nii et proovisin leida lihtsamat lahendust, et saaks lihtsalt commandidega üles saada.
 
 ---
+
+## AI usage
+
+AI abi kasutasin peamiselt järgmistes kohtades:
+
+Frontend:
+- React komponentide algse struktuuri loomine
+- mõningate UI elementide (modal/popup) realiseerimine
+- CSS stiliseerimise ideed
+
+Backend:
+- konsultatsioon tabelite seoste ja broneeringu ajavahemike kontrolli loogika osas
+- Liquibase konfiguratsiooni probleemide lahendamisel
+
+Järgmine komponent on täielikult AI abil genereeritud ja seejärel minu poolt integreeritud projekti:
+
+- `LiquibaseForceConfig`
+
+Kõik ülejäänud backend loogika, sh:
+- broneeringute kontroll
+- soovituste algoritm
+- filtreerimise loogika
+
+on minu implementeeritud.
+
 
 ## Projekti käivitamise juhend
 
@@ -82,3 +108,32 @@ npm install
 ```bash
 npm run dev
 ```
+
+
+## Testimine
+
+Rakenduse funktsionaalsust saab testida järgmiselt.
+
+### Olemasolevate broneeringute kuvamine
+1. Ava rakendus brauseris.
+2. Vali praegune kuupäev ja kellaaeg.
+3. Mõned lauad peaksid olema märgitud kui **broneeritud**.
+
+### Laudade filtreerimine
+1. Vali inimeste arv.
+2. Vali tsoon või eelistus.
+3. Käivita filtreerimine.
+
+Tulemus: kuvatakse ainult filtritele vastavad lauad.
+
+### Soovituste algoritm
+1. Sisesta inimeste arv ja vajadusel eelistus.
+2. Käivita soovituse päring.
+
+Tulemus: kuvatakse laud või lauad, mille skoor on kõige kõrgem.
+
+### Broneeringu loomine
+1. Vajuta vabale lauale.
+2. Vali broneeringu aeg ja kinnita.
+
+Tulemus: laud broneeritakse **2 tunniks** ja muutub selleks ajaks hõivatuks.

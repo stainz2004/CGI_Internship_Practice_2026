@@ -5,6 +5,8 @@ interface BookingModalProps {
   onCancel: () => void;
 }
 
+// This component was mainly suggested by AI
+
 function BookingModal({ selectedSeatingId, bookingTime, onConfirm, onCancel }: BookingModalProps) {
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
@@ -14,7 +16,7 @@ function BookingModal({ selectedSeatingId, bookingTime, onConfirm, onCancel }: B
         <p style={{ margin: '0 0 8px', fontWeight: 500 }}>
           {bookingTime
             ? bookingTime.replace('T', ' ')
-            : <em style={{ color: '#888' }}>No date selected — use the filter above</em>}
+            : <em style={{ color: '#888' }}>Vali kuupäev</em>}
         </p>
         <div style={{ marginTop: '16px', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
           <button

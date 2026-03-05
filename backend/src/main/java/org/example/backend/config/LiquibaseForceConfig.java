@@ -8,8 +8,16 @@ import org.springframework.context.annotation.Configuration;
 
 import liquibase.integration.spring.SpringLiquibase;
 
+/**
+ * This configuration was given by AI
+ * to solve an issue where Liquibase migrations were not executed
+ * when running the application via Gradle.
+ */
+
 @Configuration
 public class LiquibaseForceConfig {
+
+
 
     @Value("${spring.liquibase.change-log}")
     private String changeLog;

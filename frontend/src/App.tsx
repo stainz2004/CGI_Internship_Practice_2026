@@ -36,24 +36,19 @@ function App() {
   const [bookingTime, setBookingTime] = useState<string>('');
   const [refreshKey, setRefreshKey] = useState(0);
 
-  useEffect(() => {
-    api.get<SeatingType[]>('/seating-types')
-      .then(response => setSeatingTypes(response.data))
-      .catch(error => alert(error.response?.data?.message ?? error.message))
-  }, [])
-
     useEffect(() => {
-        api.get<Seating[]>('/seatings')
-            .then(response => {console.log(response.data)
-                setSeatings(response.data)})
+        Promise.all([
+            api.get<SeatingType[]>('/seating-types'),
+            api.get<Seating[]>('/seatings'),
+            api.get<SeatingPreference[]>('/seatings/preferences')
+        ])
+            .then(([typesRes, seatingsRes, preferencesRes]) => {
+                setSeatingTypes(typesRes.data)
+                setSeatings(seatingsRes.data)
+                setSeatingPreferences(preferencesRes.data)
+            })
             .catch(error => alert(error.response?.data?.message ?? error.message))
-    }, []);
-
-    useEffect(() => {
-        api.get<SeatingPreference[]>('/seatings/preferences')
-            .then(response => setSeatingPreferences(response.data))
-            .catch(error => alert(error.response?.data?.message ?? error.message))
-    }, []);
+    }, [])
 
     const handleBook = () => {
         if (!selectedSeatingId || !bookingTime) return;

@@ -23,10 +23,16 @@ public class SeatingService {
     private final SeatingRepository seatingRepository;
     private final SeatingMapper seatingMapper;
 
+    /**
+     * Returns all seatings in the system.
+     */
     public List<SeatingResponseDto> getAllSeating() {
         return seatingMapper.toResponseDto(seatingRepository.findAll());
     }
 
+    /**
+     * Returns seatings that match the given filter criteria.
+     */
     public List<SeatingFilterResponseDto> getFilteredSeating(SeatingFilterDto filterDTo) {
 
         Specification<Seating> spec = SeatingSpecification.matchesFilter(filterDTo.getDateAndTime(), filterDTo.getNumberOfPeople(), filterDTo.getSeatingTypeId(), filterDTo.getSelectedPreference());
@@ -35,6 +41,11 @@ public class SeatingService {
         return seatingMapper.toFilterResponseDto(matchingSeatings);
     }
 
+    /**
+     * Finds the best matching seating(s) based on scoring logic.
+     *
+     * The algorithm assigns a score to each available seating and
+     */
     public List<SeatingFilterResponseDto> getMostMatchingSeating(SeatingFilterDto filterDTo) {
         LocalDateTime dateAndTime = filterDTo.getDateAndTime();
         int numberOfPeople = filterDTo.getNumberOfPeople();
@@ -48,11 +59,13 @@ public class SeatingService {
             throw new SeatingNotFoundException("No matching seating found for the given filters");
         }
 
+        // Calculate the highest score among the candidate seatings
         double maxScore = matchingSeatings.stream()
                 .mapToDouble(s -> calculateScore(s, numberOfPeople, seatingTypeId, seatingPreferenceId))
                 .max()
                 .orElseThrow();
 
+        // Return all seatings that share the highest score
         List<Seating> mostMatchingSeatings = matchingSeatings.stream()
                 .filter(s -> calculateScore(s, numberOfPeople, seatingTypeId, seatingPreferenceId) == maxScore)
                 .toList();
@@ -60,6 +73,10 @@ public class SeatingService {
         return seatingMapper.toFilterResponseDto(mostMatchingSeatings);
     }
 
+    /**
+     * Returns IDs of seatings that are already booked
+     * at the given date and time.
+     */
     public List<Long> getBookedSeatings(LocalDateTime dateAndTime) {
         if (dateAndTime == null) {
             throw new IllegalArgumentException("Date and time can not be empty!");
@@ -75,12 +92,16 @@ public class SeatingService {
                 .toList();
     }
 
+    /**
+     * Calculates a score describing how well a seating matches
+     * the requested criteria.
+     */
     private double calculateScore(Seating seating, int numberOfPeople, Long seatingTypeId, Long seatingPreferenceId) {
         double score = 9.0 * (numberOfPeople / (double) seating.getMaxPeople());
         if (seatingTypeId != null && seatingTypeId.equals(seating.getSeatingType().getId())) {
             score += 3;
         }
-        // If normal match then add 3 BUT if filtered by "Ratastooliga ligipääsetav" then that should be nr1 priority.
+        // If normal match then add 3 BUT if filtered by "Ratastooliga ligipääsetav" then that should be nr 1 priority.
         if (seatingPreferenceId != null && seating.getPreferences().stream().map(SeatingPreference::getId).toList().contains(seatingPreferenceId)) {
             score += seating.getPreferences().stream()
                     .filter(p -> p.getId().equals(seatingPreferenceId))

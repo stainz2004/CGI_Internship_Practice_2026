@@ -1,5 +1,5 @@
 import api from '../services/api'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import './Filtering.css'
 
 interface SeatingType {
@@ -37,28 +37,26 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
     const [selectedPreference, setSelectedPreference] = useState<number | ''>('')
     const [lastAction, setLastAction] = useState<'filter' | 'suggest' | null>(null)
 
-    useEffect(() => {
-        if (!dateAndTime) return
+    const handleFilter = useCallback(() => {
+        const formattedDate = dateAndTime ? `${dateAndTime}:00` : undefined
 
-        const formattedDate = `${dateAndTime}:00`
-
-        api.get<number[]>('/seatings/booked', {
+        api.get<SeatingFilterResult[]>('/seatings/filter', {
             params: {
-                dateAndTime: formattedDate
+                ...(formattedDate && {dateAndTime: formattedDate}),
+                numberOfPeople,
+                ...(seatingTypeId !== '' && {seatingTypeId}),
+                ...(selectedPreference !== '' && {selectedPreference})
             }
         })
-            .then(response => onFilterBookedResults(response.data))
+            .then(response => {
+                onFilterResults(response.data)
+                setLastAction('filter')
+            })
             .catch(error => alert(error.response?.data?.message ?? error.message))
 
-    }, [dateAndTime, refreshKey])
+    }, [dateAndTime, numberOfPeople, seatingTypeId, selectedPreference, onFilterResults])
 
-    useEffect(() => {
-        if (!lastAction || !dateAndTime) return
-        if (lastAction === 'filter') handleFilter()
-        if (lastAction === 'suggest') handleSuggest()
-    }, [refreshKey])
-
-    const handleSuggest = () => {
+    const handleSuggest = useCallback(() => {
         if (!dateAndTime || !numberOfPeople) {
             alert('Date & Time and Number of People are required.')
             return
@@ -79,26 +77,32 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
                 setLastAction('suggest')
             })
             .catch(error => alert(error.response?.data?.message ?? error.message))
-    }
+    }, [dateAndTime, numberOfPeople, seatingTypeId, selectedPreference, onFilterResults])
 
-    const handleFilter = () => {
-        const formattedDate = dateAndTime ? `${dateAndTime}:00` : undefined
+    useEffect(() => {
+        if (!dateAndTime) return
 
-        api.get<SeatingFilterResult[]>('/seatings/filter', {
+        const formattedDate = `${dateAndTime}:00`
+
+        api.get<number[]>('/seatings/booked', {
             params: {
-                ...(formattedDate && {dateAndTime: formattedDate}),
-                numberOfPeople,
-                ...(seatingTypeId !== '' && {seatingTypeId}),
-                ...(selectedPreference !== '' && {selectedPreference})
+                dateAndTime: formattedDate
             }
         })
-            .then(response => {
-                onFilterResults(response.data)
-                setLastAction('filter')
-            })
+            .then(response => onFilterBookedResults(response.data))
             .catch(error => alert(error.response?.data?.message ?? error.message))
 
-    }
+    }, [dateAndTime, refreshKey])
+
+    useEffect(() => {
+        if (!lastAction || !dateAndTime) return
+        if (lastAction === 'filter') handleFilter()
+        if (lastAction === 'suggest') handleSuggest()
+    }, [refreshKey, lastAction, dateAndTime, handleFilter, handleSuggest])
+
+
+
+
 
     return (
         <div className="filtering-bar">
