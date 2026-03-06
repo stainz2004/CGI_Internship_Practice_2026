@@ -72,10 +72,15 @@ on minu implementeeritud.
 
 ## 1. Andmebaasi käivitamine (Docker)
 
+Selle stepi jaoks peab docker jooksma.
+
 Andmebaas töötab PostgreSQL-i konteineris. Käivita see käsuga:
 
 ```bash
 cd backend
+```
+
+```bash
 docker compose up -d
 ```
 
@@ -87,6 +92,9 @@ Backend kasutab **Java 25** ja **Spring Boot 4** koos **Gradle**.
 
 ```bash
 cd backend
+```
+
+```bash
 ./gradlew bootRun
 ```
 
@@ -100,6 +108,9 @@ Frontend kasutab **React**, **TypeScript** ja **Vite**.
 
 ```bash
 cd frontend
+```
+
+```bash
 npm install
 ```
 
