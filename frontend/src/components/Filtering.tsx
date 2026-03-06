@@ -92,13 +92,13 @@ function Filtering({ seatingTypes, seatingPreferences, onFilterResults, onFilter
             .then(response => onFilterBookedResults(response.data))
             .catch(error => alert(error.response?.data?.message ?? error.message))
 
-    }, [dateAndTime, refreshKey])
+    }, [dateAndTime, refreshKey, ])
 
     useEffect(() => {
         if (!lastAction || !dateAndTime) return
         if (lastAction === 'filter') handleFilter()
         if (lastAction === 'suggest') handleSuggest()
-    }, [refreshKey, lastAction, dateAndTime, handleFilter, handleSuggest])
+    }, [refreshKey])
 
 
 
