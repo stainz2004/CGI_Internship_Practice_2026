@@ -1,5 +1,66 @@
 # CGI_Internship_Practice_2026
 
+
+## Projekti käivitamise juhend
+
+---
+
+## 1. Andmebaasi käivitamine (Docker)
+
+Selle stepi jaoks peab docker jooksma.
+
+Andmebaas töötab PostgreSQL-i konteineris. Käivita see käsuga:
+
+
+```
+cd backend
+docker compose up -d
+```
+
+---
+
+## 2. Backend käivitamine (Spring Boot)
+
+Backend kasutab **Java 25** ja **Spring Boot 4** koos **Gradle**.
+
+```
+cd backend
+```
+
+Kui proovite tööle panna Macis või linuxil siis enne tuleb teha.
+
+
+```
+chmod +x gradlew
+```
+
+ja siis.
+
+```
+./gradlew bootRun
+```
+
+---
+
+## 3. Frontend käivitamine (React + Vite)
+
+Frontend kasutab **React**, **TypeScript** ja **Vite**.
+
+### 3.1 Sõltuvuste installimine
+
+Uues terminali aknas:
+
+```
+cd frontend
+npm install
+```
+
+### 3.2 Käivitamine
+
+```
+npm run dev
+```
+
 ## Lahendus
 
 Lõin "Nutika Restorani Reserveerimissüsteemi".
@@ -64,67 +125,6 @@ Kõik ülejäänud backend loogika, sh:
 - filtreerimise loogika
 
 on minu implementeeritud.
-
-
-## Projekti käivitamise juhend
-
----
-
-## 1. Andmebaasi käivitamine (Docker)
-
-Selle stepi jaoks peab docker jooksma.
-
-Andmebaas töötab PostgreSQL-i konteineris. Käivita see käsuga:
-
-
-```
-cd backend
-docker compose up -d
-```
-
----
-
-## 2. Backend käivitamine (Spring Boot)
-
-Backend kasutab **Java 25** ja **Spring Boot 4** koos **Gradle**.
-
-```
-cd backend
-```
-
-Kui proovite tööle panna Macis või linuxil siis enne tuleb teha.
-
-
-```
-chmod +x gradlew
-```
-
-ja siis.
-
-```
-./gradlew bootRun
-```
-
----
-
-## 3. Frontend käivitamine (React + Vite)
-
-Frontend kasutab **React**, **TypeScript** ja **Vite**.
-
-### 3.1 Sõltuvuste installimine
-
-Uues terminali aknas:
-
-```
-cd frontend
-npm install
-```
-
-### 3.2 Käivitamine
-
-```
-npm run dev
-```
 
 
 ## Testimine
