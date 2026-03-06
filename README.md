@@ -76,11 +76,9 @@ Selle stepi jaoks peab docker jooksma.
 
 Andmebaas töötab PostgreSQL-i konteineris. Käivita see käsuga:
 
-```bash
-cd backend
-```
 
-```bash
+```
+cd backend
 docker compose up -d
 ```
 
@@ -90,11 +88,20 @@ docker compose up -d
 
 Backend kasutab **Java 25** ja **Spring Boot 4** koos **Gradle**.
 
-```bash
+```
 cd backend
 ```
 
-```bash
+Kui proovite tööle panna Macis või linuxil siis enne tuleb teha.
+
+
+```
+chmod +x gradlew
+```
+
+ja siis.
+
+```
 ./gradlew bootRun
 ```
 
@@ -106,17 +113,16 @@ Frontend kasutab **React**, **TypeScript** ja **Vite**.
 
 ### 3.1 Sõltuvuste installimine
 
-```bash
-cd frontend
-```
+Uues terminali aknas:
 
-```bash
+```
+cd frontend
 npm install
 ```
 
 ### 3.2 Käivitamine
 
-```bash
+```
 npm run dev
 ```
 
